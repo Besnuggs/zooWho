@@ -3,7 +3,8 @@ import {View,
         Text,
         Animated,
         StyleSheet,
-        TouchableOpacity
+        TouchableOpacity,
+        Alert
       } from 'react-native'
 import {List, Colors} from 'react-native-paper';
 import PrimaryInput from './components/PrimaryInput'
@@ -44,16 +45,22 @@ async function setUsersList(){
 }
 
 const updateList = () => {
+  if(!list.task) return Alert.alert('Error','Please enter a task.', [{text: 'Ok'}]);
+
   if(list.editMode){
     const task = list.task,
       index = list.editTaskID,
       todoList = list.todoList.splice(index, 1, task);
-    setList({...list, todoList, editMode: false, editTaskID: null, })
+    setList({...list, todoList, editMode: false, editTaskID: null, task: ''})
   } else {
     const task = list.task,
       todoList = list.todoList.slice().push(task);
-    setList({...list, todoList})
+    setList({...list, todoList, task: ''})
   }
+}
+
+const handleChange = (text) => {
+  setList({...list, task: text})
 }
 
 const deleteTask = (id) => {
@@ -130,6 +137,7 @@ const [list, setList] = useState({
       <PrimaryButton 
         icon="plus"
         color="#90EE90"
+        handlePress={updateList}
       />
     </View>
     
@@ -153,7 +161,7 @@ const styles = StyleSheet.create({
   actionContainer: {
     display: 'flex',
     height: 300,
-    width: 300
+    width: '100%'
   }
 })
 
