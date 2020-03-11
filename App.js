@@ -11,6 +11,24 @@ import TaskItem from './components/TaskItem'
 
 const App = () => {
   
+const testTasks = [
+  {id: 1,
+  'This is test task 1'
+  },
+  {id: 2,
+  'This is test task 2'
+  },
+  {id: 3,
+  'This is test task 3'
+  },
+  {id: 4,
+  'This is test task 4'
+  },
+  {id: 5,
+  'This is test task 5'
+  }
+]
+
 // useEffect(() => {
 
 // },[])
@@ -28,9 +46,10 @@ const updateList = () => {
 }
 
 const renderTasks = () => {
-  return todoList.map((task) => {
+  return todoList.map((task,index) => {
     return 
     (<TaskItem
+      key={index}
 
     />)
   })
