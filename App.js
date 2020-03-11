@@ -46,12 +46,29 @@ const updateList = () => {
 }
 
 const renderTasks = () => {
-  return todoList.map((task) => {
+  return list.todoList.map((taskItem) => {
     return 
-    (<TaskItem
-      key={task.id}
-      
-    />)
+    (<List.Item
+        key={taskItem.id}
+        title={taskItem.task}
+        onPress={() => console.log(list.id)}
+        left={props => <List.Icon 
+                        icon="book" 
+                        color={Colors.green900}
+                        >
+                        </List.Icon>
+             }
+        right={props => <TouchableOpacity
+                            onPress={() => console.log(list.id)}
+                        >
+                            <List.Icon 
+                            icon="delete" 
+                            color={Colors.red900}
+                            >
+                            </List.Icon>
+                        </TouchableOpacity>
+              }
+          />)               
   })
 }
 
@@ -68,13 +85,13 @@ const [list, setList] = useState({
       >Simple ZooWho ToDo List
       </List.Subheader>
       {
-        todoList.length === 0 ?
+        list.todoList.length === 0 ?
         <Text
         style={styles.createTaskText}
         >Create a Task
         </Text>
         : 
-
+        renderTasks()
       }
     
     </List.Section>
