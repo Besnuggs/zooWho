@@ -57,7 +57,8 @@ const updateList = () => {
 }
 
 const deleteTask = (id) => {
-
+  const todoList = list.todoList.filter((task) => task.id !== id);
+  setList({...list, todoList})
 }
 
 const editTask = (id) => {
@@ -122,12 +123,14 @@ const [list, setList] = useState({
     <View
     style={styles.actionContainer}
     >
-    <PrimaryInput 
-    
-    />
-    <PrimaryButton 
-    
-    />
+      <PrimaryInput 
+       
+        label="Task"
+      />
+      <PrimaryButton 
+        icon="plus"
+        color="#90EE90"
+      />
     </View>
     
     </List.Section>
@@ -148,9 +151,9 @@ const styles = StyleSheet.create({
     color: '#fff'
   },
   actionContainer: {
-    flex: 1,
+    display: 'flex',
     height: 300,
-    width: '100%'
+    width: 300
   }
 })
 
