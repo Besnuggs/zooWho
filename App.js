@@ -5,7 +5,8 @@ import {View,
         StyleSheet,
         TouchableOpacity,
         Alert,
-        ScrollView
+        ScrollView,
+        Dimensions
       } from 'react-native'
 import {List, Colors} from 'react-native-paper';
 import PrimaryInput from './components/PrimaryInput'
@@ -34,7 +35,7 @@ const testTasks = [
 ]
 
 useEffect(() => {
-  setList({todoList: testTasks})
+  setList({...list, todoList: testTasks})
 },[])
 
 async function getUsersList(){
@@ -72,9 +73,9 @@ const deleteTask = (id) => {
   setList({...list, todoList})
 }
 
-const enableEditMode = (id) => {
-  const taskToEdit = list.todoList.filter((task) => task.id === id)[0].task;
-  setList({...list, editMode: true, editTaskID: id, task: taskToEdit})
+const enableEditMode = (taskItem) => {
+  const {id, task} = taskItem
+  setList({...list, editMode: true, editTaskID: id, task})
 }
 
 const renderTasks = () => {
@@ -96,7 +97,7 @@ const renderTasks = () => {
              }
         right={props => 
         <TouchableOpacity
-          onPress={() => editTask(taskItem.id)}
+          onPress={() => enableEditMode(taskItem)}
         >
          <List.Icon 
           icon="pencil" 
@@ -122,6 +123,7 @@ const [list, setList] = useState({
         style={styles.title}
       >Simple ZooWho ToDo List
       </List.Subheader>
+
       {
         list.todoList.length === 0 ?
         <Text
@@ -130,20 +132,22 @@ const [list, setList] = useState({
         </Text>
         :
         <ScrollView
-          style={{flex:1}}
-          scrollEnabled={scrollEnabled}
+          scrollEnabled={true}
+          style={styles.scrollStyle}
         >
           <View>
            {renderTasks()}
           </View>
         </ScrollView> 
       }
+
     <View
     style={styles.actionContainer}
     >
       <PrimaryInput 
         handleText={handleChange}
         label="Task"
+        value={list.task}
       />
       <PrimaryButton 
         icon="plus"
@@ -167,12 +171,20 @@ const styles = StyleSheet.create({
   },
   createTaskText: {
     fontSize: 22,
-    color: '#fff'
+    color: '#000',
+    display: 'flex',
+    alignSelf: 'center',
+    justifyContent: 'center'
   },
   actionContainer: {
     display: 'flex',
     height: 300,
-    width: '100%'
+    width: Dimensions.get('window').width,
+    position: 'absolute',
+    bottom:0
+  },
+  scrollStyle: {
+    top: 0
   }
 })
 

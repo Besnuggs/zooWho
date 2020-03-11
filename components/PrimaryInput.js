@@ -6,7 +6,7 @@ const PrimaryInput = (props) => {
     return(
         <TextInput
             onChangeText={handleText}
-            // value={value}
+            value={value}
             label={label}
             style
         />
