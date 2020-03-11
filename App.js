@@ -3,9 +3,11 @@ import {View,
         Text,
         Animated,
         StyleSheet,
+        TouchableOpacity
       } from 'react-native'
-import {List} from 'react-native-paper';
-import TaskItem from './components/TaskItem'
+import {List, Colors} from 'react-native-paper';
+import PrimaryInput from './components/PrimaryInput'
+import PrimaryButton from './components/PrimaryButton'
 
 
 
@@ -42,39 +44,63 @@ async function setUsersList(){
 }
 
 const updateList = () => {
+  if(list.editMode){
+    const task = list.task,
+      index = list.editTaskID,
+      todoList = list.todoList.splice(index, 1, task);
+    setList({...list, todoList, editMode: false, editTaskID: null, })
+  } else {
+    const task = list.task,
+      todoList = list.todoList.slice().push(task);
+    setList({...list, todoList})
+  }
+}
 
+const deleteTask = (id) => {
+
+}
+
+const editTask = (id) => {
+  const taskToEdit = list.todoList.filter((task) => task.id === id)[0];
+  setList({...list, editMode: true, editTaskID: id})
 }
 
 const renderTasks = () => {
   return list.todoList.map((taskItem) => {
-    return 
-    (<List.Item
+    return <List.Item
         key={taskItem.id}
         title={taskItem.task}
-        onPress={() => console.log(list.id)}
-        left={props => <List.Icon 
-                        icon="book" 
-                        color={Colors.green900}
+        onPress={() => console.log(taskItem)}
+        left={props => <TouchableOpacity
+                        onPress={() => deleteTask(taskItem.id)}
+                      >
+                        <List.Icon 
+                        icon="delete" 
+                        color={Colors.red900}
+                        
                         >
                         </List.Icon>
+                    </TouchableOpacity>
              }
-        right={props => <TouchableOpacity
-                            onPress={() => console.log(list.id)}
-                        >
-                            <List.Icon 
-                            icon="delete" 
-                            color={Colors.red900}
-                            >
-                            </List.Icon>
-                        </TouchableOpacity>
+        right={props => 
+        <TouchableOpacity
+          onPress={() => editTask(taskItem.id)}
+        >
+         <List.Icon 
+          icon="pencil" 
+          color={Colors.green900}
+          >
+          </List.Icon>
+        </TouchableOpacity>
               }
-          />)               
+          />              
   })
 }
 
 const [list, setList] = useState({
   todoList: [],
   task: '',
+  editTaskID: null,
   editMode: false
 })
 
@@ -93,8 +119,19 @@ const [list, setList] = useState({
         : 
         renderTasks()
       }
+    <View
+    style={styles.actionContainer}
+    >
+    <PrimaryInput 
+    
+    />
+    <PrimaryButton 
+    
+    />
+    </View>
     
     </List.Section>
+
   )
 }
 
@@ -109,6 +146,11 @@ const styles = StyleSheet.create({
   createTaskText: {
     fontSize: 22,
     color: '#fff'
+  },
+  actionContainer: {
+    flex: 1,
+    height: 300,
+    width: '100%'
   }
 })
 
