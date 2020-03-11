@@ -4,7 +4,8 @@ import {View,
         Animated,
         StyleSheet,
         TouchableOpacity,
-        Alert
+        Alert,
+        ScrollView
       } from 'react-native'
 import {List, Colors} from 'react-native-paper';
 import PrimaryInput from './components/PrimaryInput'
@@ -15,19 +16,19 @@ import PrimaryButton from './components/PrimaryButton'
 const App = () => {
   
 const testTasks = [
-  {id: 1,
+  {id: 0,
   task: 'This is test task 1'
   },
-  {id: 2,
+  {id: 1,
   task: 'This is test task 2'
   },
-  {id: 3,
+  {id: 2,
   task: 'This is test task 3'
   },
-  {id: 4,
+  {id: 3,
   task: 'This is test task 4'
   },
-  {id: 5,
+  {id: 4,
   task: 'This is test task 5'
   }
 ]
@@ -72,8 +73,8 @@ const deleteTask = (id) => {
 }
 
 const enableEditMode = (id) => {
-  const taskToEdit = list.todoList.filter((task) => task.id === id)[0];
-  setList({...list, editMode: true, editTaskID: id})
+  const taskToEdit = list.todoList.filter((task) => task.id === id)[0].task;
+  setList({...list, editMode: true, editTaskID: id, task: taskToEdit})
 }
 
 const renderTasks = () => {
@@ -81,7 +82,7 @@ const renderTasks = () => {
     return <List.Item
         key={taskItem.id}
         title={taskItem.task}
-        onPress={() => console.log(taskItem)}
+        onPress={() => enableEditMode(taskItem)}
         left={props => <TouchableOpacity
                         onPress={() => deleteTask(taskItem.id)}
                       >
@@ -127,8 +128,15 @@ const [list, setList] = useState({
         style={styles.createTaskText}
         >Create a Task
         </Text>
-        : 
-        renderTasks()
+        :
+        <ScrollView
+          style={{flex:1}}
+          scrollEnabled={scrollEnabled}
+        >
+          <View>
+           {renderTasks()}
+          </View>
+        </ScrollView> 
       }
     <View
     style={styles.actionContainer}
