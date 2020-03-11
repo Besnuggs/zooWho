@@ -53,14 +53,17 @@ const updateList = () => {
       todoList = list.todoList.splice(index, 1, task);
     setList({...list, todoList, editMode: false, editTaskID: null, task: ''})
   } else {
-    const task = list.task,
-      todoList = list.todoList.slice().push(task);
+    const task = {task: list.task, id: list.todoList.length},
+      todoList = list.todoList.slice();
+      todoList.push(task)
     setList({...list, todoList, task: ''})
+    console.log(list.task, todoList)
   }
 }
 
 const handleChange = (text) => {
   setList({...list, task: text})
+  console.log(text, list.task)
 }
 
 const deleteTask = (id) => {
@@ -68,7 +71,7 @@ const deleteTask = (id) => {
   setList({...list, todoList})
 }
 
-const editTask = (id) => {
+const enableEditMode = (id) => {
   const taskToEdit = list.todoList.filter((task) => task.id === id)[0];
   setList({...list, editMode: true, editTaskID: id})
 }
@@ -131,7 +134,7 @@ const [list, setList] = useState({
     style={styles.actionContainer}
     >
       <PrimaryInput 
-       
+        handleText={handleChange}
         label="Task"
       />
       <PrimaryButton 
